@@ -31,7 +31,7 @@ exports.hashAndSub = function(grunt, options) {
   grunt.log.debug(renameFiles ? 'Renaming files' : 'Not renaming files');
 
   formatter = utils.compileFormat(fileNameFormat);
-  searchFormatter = utils.compileSearchFormat(fileNameFormat);
+  //searchFormatter = utils.compileSearchFormat(fileNameFormat);
 
   if (options.files) {
     options.files.forEach(function(f) {
@@ -43,16 +43,16 @@ exports.hashAndSub = function(grunt, options) {
               hash: md5,
               name: fileName.slice(0, lastIndex),
               ext : fileName.slice(lastIndex + 1, fileName.length)
-            }),
-            nameSearch = searchFormatter({
-              hash: /[0-9a-f]{8}/,
-              name: fileName.slice(0, lastIndex),
-              ext: fileName.slice(lastIndex + 1, fileName.length)
+            //}),
+            //nameSearch = searchFormatter({
+            //  hash: /[0-9a-f]{8}/,
+            //  name: fileName.slice(0, lastIndex),
+            //  ext: fileName.slice(lastIndex + 1, fileName.length)
             });
 
         // Mapping the original name with hashed one for later use.
         nameToHashedName[fileName] = renamed;
-        nameToNameSearch[fileName] = nameSearch;
+        //nameToNameSearch[fileName] = nameSearch;
 
         // Renaming the file
         if (renameFiles) {
@@ -85,11 +85,13 @@ exports.hashAndSub = function(grunt, options) {
           grunt.log.debug('Substituting ' + value[0] + ' by ' + value[1])
           destContents = destContents.replace(new RegExp(utils.preg_quote(value[0])+"(\\?[0-9a-z]+)?", "g"), value[1]);
 
-          grunt.log.debug('Substituting ' + nameToNameSearch[value[0]] + ' by ' + value[1])
-          destContents = destContents.replace(
-                new RegExp(nameToNameSearch[value[0]], "g"), 
-                value[1]
-            );
+          //dancetrain: Removed because regexp renames all hashed references
+
+          //grunt.log.debug('Substituting ' + nameToNameSearch[value[0]] + ' by ' + value[1])
+          //destContents = destContents.replace(
+          //      new RegExp(nameToNameSearch[value[0]], "g"),
+          //      value[1]
+          //  );
         });
         grunt.log.debug('Saving the updated contents of the outination file');
         fs.writeFileSync(f, destContents, encoding);
