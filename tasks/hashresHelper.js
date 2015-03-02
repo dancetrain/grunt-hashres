@@ -19,6 +19,7 @@ exports.hashAndSub = function(grunt, options) {
       encoding         = options.encoding,
       fileNameFormat   = options.fileNameFormat,
       renameFiles      = options.renameFiles,
+      suffixTrimLength = options.suffixTrim ? options.suffixTrim.length : 0,
       nameToHashedName = {},
       nameToNameSearch = {},
       formatter        = null,
@@ -65,7 +66,11 @@ exports.hashAndSub = function(grunt, options) {
       // @crodas
       var files = [];
       for (var name in nameToHashedName) {
-        files.push([name, nameToHashedName[name]]);
+        var hashedName = nameToHashedName[name];
+        if (suffixTrimLength) {
+            hashedName = hashedName.substr(0, hashedName.length - suffixTrimLength);
+        }
+        files.push([name, hashedName]);
       }
       files.sort(function(a, b) {
         return b[0].length - a[0].length;
